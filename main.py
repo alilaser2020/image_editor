@@ -15,6 +15,7 @@ def update_image(original, blur, contrast, emboss, contour, flipx, flipy):
     :param flipy:
     :return:
     """
+    global image
     image = original.filter(ImageFilter.GaussianBlur(blur))
     image = image.filter(ImageFilter.UnsharpMask(contrast))
     if emboss:
@@ -42,7 +43,8 @@ control_col = sg.Column([
      sg.Checkbox("Contour", key="-CONTOUR-", expand_x=True)],
     [sg.Checkbox("Flip x", key="-FLIPX-", expand_x=True),
      sg.Checkbox("Flip y", key="-FLIPY-", expand_x=True)],
-    [sg.Button("Save", key="-SAVE-", expand_x=True)]
+    [sg.Button("Save", key="-SAVE-", expand_x=True)],
+    [sg.Button("Open", key="-OPEN-", expand_x=True)]
 ])
 
 layout = [
@@ -66,5 +68,13 @@ while True:
                  values["-FLIPX-"],
                  values["-FLIPY-"]
                  )
+
+    if event == "-SAVE-":
+        save_path = sg.popup_get_file("Save", no_window=True, save_as=True) + ".png"
+        image.save(save_path, "PNG")
+
+    if event == "-OPEN-":
+        image_path = sg.popup_get_file("Open", no_window=True)
+        original = Image.open(image_path)
 
 window.close()
