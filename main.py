@@ -3,6 +3,19 @@ from PIL import Image, ImageFilter, ImageOps
 from io import BytesIO
 
 
+def reset_items():
+    """
+    A method for reset all items (blur, contrast, emboss, contour, flipx and flipy) after opening a new image
+    :return:
+    """
+    window["-BLUR-"].update(0)
+    window["-CONTRAST-"].update(0)
+    window["-EMBOSS-"].update(False)
+    window["-CONTOUR-"].update(False)
+    window["-FLIPX-"].update(False)
+    window["-FLIPY-"].update(False)
+
+
 def update_image(original, blur, contrast, emboss, contour, flipx, flipy):
     """
     A method for updating given image
@@ -76,5 +89,6 @@ while True:
     if event == "-OPEN-":
         image_path = sg.popup_get_file("Open", no_window=True)
         original = Image.open(image_path)
+        reset_items()
 
 window.close()
